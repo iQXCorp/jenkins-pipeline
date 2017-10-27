@@ -119,6 +119,7 @@ def getContainerTags(config, Map tags = [:]) {
     println "getting list of tags for container"
     def String commit_tag
     def String version_tag
+    def String branch_name
 
     try {
         // if PR branch tag with only branch name
@@ -135,7 +136,8 @@ def getContainerTags(config, Map tags = [:]) {
     try {
         // if branch available, use as prefix, otherwise only commit hash
         if (env.BRANCH_NAME) {
-            commit_tag = env.BRANCH_NAME + '-' + env.GIT_COMMIT_ID.substring(0, 7)
+            branch_name = env.BRANCH_NAME.replace("/", "")
+            commit_tag = branch_name + '-' + env.GIT_COMMIT_ID.substring(0, 7)
         } else {
             commit_tag = env.GIT_COMMIT_ID.substring(0, 7)
         }
