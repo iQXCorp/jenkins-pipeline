@@ -29,6 +29,7 @@ def helmDeploy(Map args) {
     helmConfig()
 
     def String namespace
+    def String values_file
 
     // If namespace isn't parsed into the function set the namespace to the name
     if (args.namespace == null) {
@@ -37,15 +38,22 @@ def helmDeploy(Map args) {
         namespace = args.namespace
     }
 
+    // If values_file isn't parsed into the function set the values_file blank space
+    if (args.values_file == null) {
+        values_file = ""
+    } else {
+        values_file = " -f ${args.values_file} "
+    }
+
     if (args.dry_run) {
         println "Running dry-run deployment"
 
-        sh "helm upgrade --dry-run --install ${args.name} ${args.chart_dir} --set imageTag=${args.version_tag} --namespace=${namespace}"
+        sh "helm upgrade --dry-run --install ${args.name} ${args.chart_dir} ${values_file} --set imageTag=${args.version_tag} --namespace=${namespace}"
     } else {
         println "Running deployment"
 
         // reimplement --wait once it works reliable
-        sh "helm upgrade --install ${args.name} ${args.chart_dir} --set imageTag=${args.version_tag} --namespace=${namespace}"
+        sh "helm upgrade --install ${args.name} ${args.chart_dir}  ${values_file} --set imageTag=${args.version_tag} --namespace=${namespace}"
 
         // sleeping until --wait works reliably
         sleep(20)
