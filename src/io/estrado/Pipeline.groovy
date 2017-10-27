@@ -1,5 +1,6 @@
 #!/usr/bin/groovy
 package io.estrado;
+import groovy.json.JsonOutput
 
 def kubectlTest() {
     // Test that kubectl can correctly communication with the Kubernetes API
@@ -7,6 +8,19 @@ def kubectlTest() {
     sh "kubectl get nodes"
 
 }
+
+def notifySlack(text, channel, slackURL, emoji) {
+    if (emoji == null) {
+      emoji = ":thumbsup:"
+    }
+    def payload = JsonOutput.toJson([text      : text,
+                                     channel   : channel,
+                                     username  : "jenkins",
+                                     icon_emoji: emoji])
+    sh "curl -X POST --data-urlencode \'payload=${payload}\' ${slackURL}"
+}
+
+Timestam
 
 def helmLint(String chart_dir) {
     // lint helm chart
