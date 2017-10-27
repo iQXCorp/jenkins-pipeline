@@ -48,12 +48,12 @@ def helmDeploy(Map args) {
     if (args.dry_run) {
         println "Running dry-run deployment"
 
-        sh "helm upgrade --dry-run --install ${args.name} ${args.chart_dir} ${values_file} --set imageTag=${args.version_tag} --namespace=${namespace}"
+        sh "helm upgrade --dry-run --install ${args.name} ${args.chart_dir} ${values_file} --set ${args.set_name}=${args.set_value} --namespace=${namespace}"
     } else {
         println "Running deployment"
 
         // reimplement --wait once it works reliable
-        sh "helm upgrade --install ${args.name} ${args.chart_dir}  ${values_file} --set imageTag=${args.version_tag} --namespace=${namespace}"
+        sh "helm upgrade --install ${args.name} ${args.chart_dir}  ${values_file} --set --set ${args.set_name}=${args.set_value} --namespace=${namespace}"
 
         // sleeping until --wait works reliably
         sleep(20)
