@@ -17,7 +17,7 @@ def notifySlack(text, channel, slackURL, emoji) {
                                      channel   : channel,
                                      username  : "jenkins",
                                      icon_emoji: emoji])
-    sh "curl -X POST --data-urlencode \'payload=${payload}\' ${slackURL}"
+    sh "/usr/bin/curl -X POST --data-urlencode \'payload=${payload}\' ${slackURL}"
 }
 
 def helmLint(String chart_dir) {
