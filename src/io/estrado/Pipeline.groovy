@@ -20,8 +20,6 @@ def notifySlack(text, channel, slackURL, emoji) {
     sh "curl -X POST --data-urlencode \'payload=${payload}\' ${slackURL}"
 }
 
-Timestam
-
 def helmLint(String chart_dir) {
     // lint helm chart
     println "running helm lint ${chart_dir}"
