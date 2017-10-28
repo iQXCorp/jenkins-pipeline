@@ -14,7 +14,6 @@ def notifySlack(text, channel, slackURL, emoji) {
       emoji = ":thumbsup:"
     }
     def payload = JsonOutput.toJson([text      : text,
-                                     channel   : channel,
                                      username  : "jenkins",
                                      icon_emoji: emoji])
 
