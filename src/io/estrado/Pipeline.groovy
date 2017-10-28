@@ -18,6 +18,8 @@ def notifySlack(text, channel, slackURL, emoji) {
                                      username  : "jenkins",
                                      icon_emoji: emoji])
 
+    println payload
+
     def response = httpRequest url: slackURL, contentType: 'APPLICATION_JSON', httpMode: 'POST', requestBody: payload
     // sh "/usr/bin/curl -X POST --data-urlencode \'payload=${payload}\' ${slackURL}"
 }
