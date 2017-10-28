@@ -20,7 +20,8 @@ def notifySlack(text, channel, slackURL, emoji) {
 
     println payload
 
-    def response = httpRequest url: slackURL, contentType: 'APPLICATION_JSON', httpMode: 'POST', requestBody: payload
+    def response = httpRequest url: slackURL, httpMode: 'POST', requestBody: payload
+    println response
     // sh "/usr/bin/curl -X POST --data-urlencode \'payload=${payload}\' ${slackURL}"
 }
 
