@@ -130,6 +130,23 @@ def containerBuildPub(Map args) {
     }
 }
 
+def containerSurgeBuildPub(Map args) {
+
+    println "Running Docker build/publish: ${args.host}/${args.acct}/${args.repo}:${args.tags}"
+
+    docker.withRegistry("https://${args.host}", "${args.auth_id}") {
+
+        // def img = docker.build("${args.acct}/${args.repo}", args.dockerfile)
+        def img = docker.image("${args.acct}/${args.repo}")
+        sh "docker build --build-arg SURGE_LOGIN=${args.surge_email} --build-arg SURGE_TOKEN=${args.surge_token} -t ${args.acct}/${args.repo} ${args.dockerfile}"
+        for (int i = 0; i < args.tags.size(); i++) {
+            img.push(args.tags.get(i))
+        }
+
+        return img.id
+    }
+}
+
 def getContainerTags(config, Map tags = [:]) {
 
     println "getting list of tags for container"
