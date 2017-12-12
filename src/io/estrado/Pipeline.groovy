@@ -188,13 +188,22 @@ def getContainerRepoAcct(config) {
     println "setting container registry creds according to Jenkinsfile.json"
     def String acct
 
-    if (env.BRANCH_NAME == 'master') {
+    try {
+
+        println "env.BRANCH_NAME == ${env.BRANCH_NAME}"
+
+      if (env.BRANCH_NAME == 'master') {
+
         acct = config.container_repo.master_acct
-    } else {
-        acct = config.container_repo.alt_acct
+        } else {
+          acct = config.container_repo.alt_acct
+        }
+
+        return acct
+    } catch(caughtError) {
+      println caughtError
     }
 
-    return acct
 }
 
 @NonCPS
