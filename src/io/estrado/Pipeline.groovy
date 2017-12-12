@@ -217,8 +217,8 @@ def getContainerRepoAcct(config) {
         }
 
         return acct
-    } catch(caughtError) {
-      println caughtError
+    } catch (Exception e) {
+        println "WARNING: commit unavailable from env. ${e}"
     }
 
 }
