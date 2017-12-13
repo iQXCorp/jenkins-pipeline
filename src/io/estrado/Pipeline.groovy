@@ -64,12 +64,12 @@ def helmDeploy(Map args) {
     if (args.dry_run) {
         println "Running dry-run deployment"
 
-        sh "helm upgrade --dry-run --install ${args.name} ${args.chart_dir} ${values_file} ${args.set_command} --namespace=${namespace}"
+        sh "helm upgrade --dry-run --install ${args.name} ${args.chart_dir} ${values_file} --set ${args.set_name}=${args.set_value} --namespace=${namespace}"
     } else {
         println "Running deployment"
 
         // reimplement --wait once it works reliable
-        sh "helm upgrade --install ${args.name} ${args.chart_dir} ${values_file} ${args.set_command} --namespace=${namespace}"
+        sh "helm upgrade --install ${args.name} ${args.chart_dir} ${values_file} --set ${args.set_name}=${args.set_value} --namespace=${namespace}"
 
         // sleeping until --wait works reliably
         sleep(20)
@@ -122,23 +122,6 @@ def containerBuildPub(Map args) {
         // def img = docker.build("${args.acct}/${args.repo}", args.dockerfile)
         def img = docker.image("${args.acct}/${args.repo}")
         sh "docker build -t ${args.acct}/${args.repo} ${args.dockerfile}"
-        for (int i = 0; i < args.tags.size(); i++) {
-            img.push(args.tags.get(i))
-        }
-
-        return img.id
-    }
-}
-
-def containerSurgeBuildPub(Map args) {
-
-    println "Running Docker build/publish: ${args.host}/${args.acct}/${args.repo}:${args.tags}"
-
-    docker.withRegistry("https://${args.host}", "${args.auth_id}") {
-
-        // def img = docker.build("${args.acct}/${args.repo}", args.dockerfile)
-        def img = docker.image("${args.acct}/${args.repo}")
-        sh "docker build --build-arg SURGE_LOGIN=${args.surge_email} --build-arg SURGE_TOKEN=${args.surge_token} -f ${args.dockerfileName} -t ${args.acct}/${args.repo} ${args.dockerfile}"
         for (int i = 0; i < args.tags.size(); i++) {
             img.push(args.tags.get(i))
         }
@@ -202,27 +185,16 @@ def getContainerTags(config, Map tags = [:]) {
 
 def getContainerRepoAcct(config) {
 
-    println "config == ${config}"
-    println "env == ${env}"
-    def String acct
+    println "setting container registry creds according to Jenkinsfile.json"
+    def acct = config.container_repo.master_acct
 
-    try {
-
-
-        println "env.BRANCH_NAME == ${env.BRANCH_NAME}"
-
-      if (env.BRANCH_NAME == 'master') {
-
+    if (env.BRANCH_NAME == 'master') {
         acct = config.container_repo.master_acct
-        } else {
-          acct = config.container_repo.alt_acct
-        }
-
-        return acct
-    } catch (Exception e) {
-        println "WARNING: commit unavailable from env. ${e}"
+    } else {
+        acct = config.container_repo.alt_acct
     }
 
+    return acct
 }
 
 @NonCPS
