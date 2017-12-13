@@ -44,8 +44,8 @@ def helmDeploy(Map args) {
     //configure helm client and confirm tiller process is installed
     helmConfig()
 
-    def String namespace
-    def String values_file
+    def  namespace
+    def  values_file
 
     // If namespace isn't parsed into the function set the namespace to the name
     if (args.namespace == null) {
@@ -133,9 +133,9 @@ def containerBuildPub(Map args) {
 def getContainerTags(config, Map tags = [:]) {
 
     println "getting list of tags for container"
-    def String commit_tag
-    def String version_tag
-    def String branch_name
+    def  commit_tag
+    def  version_tag
+    def  branch_name
 
     try {
         // if PR branch tag with only branch name
