@@ -202,12 +202,12 @@ def getContainerTags(config, Map tags = [:]) {
 
 def getContainerRepoAcct(config) {
 
-    println "setting container registry creds according to Jenkinsfile.json"
+    println "config == ${config}"
+    println "env == ${env}"
     def String acct
 
     try {
 
-        println "env == ${env}"
 
         println "env.BRANCH_NAME == ${env.BRANCH_NAME}"
 
