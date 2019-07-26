@@ -121,7 +121,7 @@ def containerBuildPub(Map args) {
 
         // def img = docker.build("${args.acct}/${args.repo}", args.dockerfile)
         def img = docker.image("${args.acct}/${args.repo}")
-        sh "docker build -t ${args.acct}/${args.repo} ${args.dockerfile}"
+        sh "docker build --network=host -t ${args.acct}/${args.repo} ${args.dockerfile}"
         for (int i = 0; i < args.tags.size(); i++) {
             img.push(args.tags.get(i))
         }
@@ -138,7 +138,7 @@ def containerSurgeBuildPub(Map args) {
 
         // def img = docker.build("${args.acct}/${args.repo}", args.dockerfile)
         def img = docker.image("${args.acct}/${args.repo}")
-        sh "docker build --build-arg SURGE_LOGIN=${args.surge_email} --build-arg SURGE_TOKEN=${args.surge_token} -f ${args.dockerfileName} -t ${args.acct}/${args.repo} ${args.dockerfile}"
+        sh "docker build --network=host --build-arg SURGE_LOGIN=${args.surge_email} --build-arg SURGE_TOKEN=${args.surge_token} -f ${args.dockerfileName} -t ${args.acct}/${args.repo} ${args.dockerfile}"
         for (int i = 0; i < args.tags.size(); i++) {
             img.push(args.tags.get(i))
         }
