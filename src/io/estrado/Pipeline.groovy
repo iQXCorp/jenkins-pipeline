@@ -34,8 +34,9 @@ def helmLint(String chart_dir) {
 def helmConfig() {
     //setup helm connectivity to Kubernetes API and Tiller
     println "initiliazing helm client"
-    sh "helm repo add 'stable' 'https://charts.helm.sh/stable'"
-    sh "helm init"    
+    // sh "helm repo add 'stable' 'https://charts.helm.sh/stable'"
+    // sh "helm init"    
+    sh "helm init --client-only"  
     println "checking client/server version"
     sh "helm version"
 }
