@@ -36,7 +36,7 @@ def helmConfig() {
     println "initiliazing helm client"
     // sh "helm repo add 'stable' 'https://charts.helm.sh/stable'"
     // sh "helm init"    
-    sh "helm init --client-only"  
+    sh "helm init --stable-repo-url=https://charts.helm.sh/stable --client-only"  
     println "checking client/server version"
     sh "helm version"
 }
